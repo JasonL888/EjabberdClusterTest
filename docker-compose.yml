@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+
+  ejabberd01:
+    image: ejabberd/ecs:20.07
+    container_name: ejabberd01
+    hostname: ejabberd01
+    ports:
+      - "5122:5222" # default XMPP port for client
+      - "5180:5280" # admin interface, API
+      - "5169:5269" # XMPP federation
+    networks:
+      backend:
+        ipv4_address: 172.22.0.11
+    volumes:
+      - ejabberd01-data:/home/ejabberd
+      - ${PWD}/conf/ejabberd.yml:/home/ejabberd/conf/ejabberd.yml
+      - ${PWD}/conf/ejabberd01/ejabberdctl.cfg:/home/ejabberd/conf/ejabberdctl.cfg
+      - ${PWD}/conf/erlang.cookie:/home/ejabberd/.erlang.cookie
+
+  ejabberd02:
+    image: ejabberd/ecs:20.07
+    container_name: ejabberd02
+    hostname: ejabberd02
+    ports:
+      - "5222:5222" # default XMPP port for client
+      - "5280:5280" # admin interface, API
+      - "5269:5269" # XMPP federation
+    networks:
+      backend:
+        ipv4_address: 172.22.0.12
+    volumes:
+      - ejabberd02-data:/home/ejabberd
+      - ${PWD}/conf/ejabberd.yml:/home/ejabberd/conf/ejabberd.yml
+      - ${PWD}/conf/ejabberd02/ejabberdctl.cfg:/home/ejabberd/conf/ejabberdctl.cfg
+      - ${PWD}/conf/erlang.cookie:/home/ejabberd/.erlang.cookie
+
+
+networks:
+  backend:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.22.0.0/16"
+
+volumes:
+  ejabberd01-data:
+  ejabberd02-data:
