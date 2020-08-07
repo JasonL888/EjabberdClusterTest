@@ -1,6 +1,4 @@
 # EjabberdClusterTest
-Test out ejabberd clustering
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
